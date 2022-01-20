@@ -20,23 +20,23 @@ resource "aws_vpc" "dev" {
 }
 
 resource "aws_subnet" "public1" {
-  vpc_id                  = aws_vpc.dev
+  vpc_id                  = aws_vpc.dev.id
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "ap-southeast-1a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public1"
+    Name = "Public subnet 1"
   }
 }
 
 resource "aws_subnet" "private1" {
-  vpc_id                  = aws_vpc.dev
+  vpc_id                  = aws_vpc.dev.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "ap-southeast-1a"
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "private1"
+    Name = "Private subnet 1"
   }
 }
