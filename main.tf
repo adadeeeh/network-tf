@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+    organization = "YtseJam"
+
+    workspaces {
+      name = "Network-TF"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -78,10 +86,10 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# resource "aws_route_table" "private" {
-#   vpc_id = aws_vpc.dev.id
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.dev.id
 
-#   tags = {
-#     Name = "RT Private"
-#   }
-# }
+  tags = {
+    Name = "RT Private"
+  }
+}
