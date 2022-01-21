@@ -48,39 +48,39 @@ resource "aws_subnet" "private" {
   tags = {
     Name = "Private subnet ${count.index + 1}"
   }
-
-  resource "aws_internet_gateway" "igw" {
-    vpc_id = aws_vpc.dev.id
-
-    tags = {
-      Name = "IGW Dev"
-    }
-  }
-
-  resource "aws_route_table" "public" {
-    vpc_id = aws_vpc.dev.ID
-
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = aws_internet_gateway.igw.ID
-    }
-
-    tags = {
-        Name = "RT Public"
-    }
-
-  }
-
-  # resource "aws_route_table_association" "public" {
-  #     subnet_id = aws_subnet.public1.id
-  #     routetable_id = aws_route_table.public.id
-  # }
-
-  # resource "aws_route_table" "private" {
-  #   vpc_id = aws_vpc.dev.id
-
-  #   tags = {
-  #     Name = "RT Private"
-  #   }
-  # }
 }
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.dev.id
+
+  tags = {
+    Name = "IGW Dev"
+  }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.dev.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "RT Public"
+  }
+
+}
+
+# resource "aws_route_table_association" "public" {
+#     subnet_id = aws_subnet.public1.id
+#     routetable_id = aws_route_table.public.id
+# }
+
+# resource "aws_route_table" "private" {
+#   vpc_id = aws_vpc.dev.id
+
+#   tags = {
+#     Name = "RT Private"
+#   }
+# }
