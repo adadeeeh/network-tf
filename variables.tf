@@ -1,3 +1,9 @@
+variable "aws_region" {
+  description = "AWS region"
+  type = string
+  default = "ap-southeast-1"
+}
+
 variable "public_subnet_count" {
   description = "Number of public subnet"
   type        = number

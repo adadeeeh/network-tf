@@ -1,3 +1,8 @@
+output "region" {
+  description = "AWS region"
+  value = var.aws_region
+}
+
 output "vpc_id" {
   description = "VPC ID"
   value       = aws_vpc.dev.id
