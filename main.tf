@@ -100,8 +100,9 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_security_group" "sg_web" {
-  description = "Allow HTTP/HTTPS"
+resource "aws_security_group" "sg_lb" {
+  description = "Allow HTTP"
+  name        = "SG Load Balancer"
   vpc_id      = aws_vpc.dev.id
 
   ingress {
@@ -112,12 +113,29 @@ resource "aws_security_group" "sg_web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "HTTPS ingress"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "SG Load Balancer"
+  }
+}
+
+resource "aws_security_group" "sg_web" {
+  description = "Allow HTTP"
+  name        = "SG Web"
+  vpc_id      = aws_vpc.dev.id
+
+  ingress {
+    description = "HTTP ingress"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = aws_subnet.public.*.cidr_block
   }
 
   ingress {
@@ -125,6 +143,66 @@ resource "aws_security_group" "sg_web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+    cidr_blocks = aws_subnet.public.*.cidr_block
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    name = "SG Web"
+  }
+}
+
+resource "aws_lb" "lb" {
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.sg_lb.id]
+  subnets            = aws_subnet.public.*.id
+
+  tags = {
+    Name = "Load Balancer Dev"
+  }
+}
+
+resource "aws_lb_target_group" "http" {
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.dev.id
+
+  target_type = "instance"
+
+  stickiness {
+    type            = "lb_cookie"
+    cookie_duration = 1800
+    enabled         = true
+  }
+
+  health_check {
+    healthy_threshold   = 3
+    unhealthy_threshold = 10
+    timeout             = 5
+    interval            = 10
+    path                = "/index.html"
+    port                = 80
+  }
+
+  tags = {
+    Name = "Load balancer dev target group"
+  }
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.lb.arn
+  port              = "80"
+  protocol          = "http"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.http.arn
   }
 }
