@@ -1,6 +1,6 @@
 output "region" {
   description = "AWS region"
-  value = var.aws_region
+  value       = var.aws_region
 }
 
 output "vpc_id" {
@@ -16,4 +16,13 @@ output "public_subnet" {
 output "private_subnet" {
   description = "Privat Subnet IDs"
   value       = aws_subnet.private.*.id
+}
+
+output "lb_target_group_http_arn" {
+  description = "ARN of load balancer HTTP target group"
+  value       = aws_lb_target_group.http.arn
+}
+
+output "public_dns_name" {
+  value = aws_lb.lb.dns_name
 }
