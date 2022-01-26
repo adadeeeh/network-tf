@@ -159,6 +159,7 @@ resource "aws_security_group" "sg_web" {
 }
 
 resource "aws_lb" "lb" {
+  name               = "load-balancer-dev"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg_lb.id]
@@ -170,6 +171,7 @@ resource "aws_lb" "lb" {
 }
 
 resource "aws_lb_target_group" "http" {
+  name     = "target-group-dev"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.dev.id
