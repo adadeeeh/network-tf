@@ -94,11 +94,11 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "private" {
-  count          = var.private_subnet_count
-  subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private.id
-}
+# resource "aws_route_table_association" "private" {
+#   count          = var.private_subnet_count
+#   subnet_id      = aws_subnet.private[count.index].id
+#   route_table_id = aws_route_table.private.id
+# }
 
 resource "aws_security_group" "sg_lb" {
   description = "Allow HTTP"
