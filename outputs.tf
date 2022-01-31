@@ -13,6 +13,11 @@ output "sg_web" {
   value       = [aws_security_group.sg_web.id]
 }
 
+output "sg_web_public" {
+  description = "Security group web public"
+  value       = [aws_security_group.sg_web_public.id]
+}
+
 output "public_subnet" {
   description = "Public Subnet IDs"
   value       = aws_subnet.public.*.id
