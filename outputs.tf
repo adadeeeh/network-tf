@@ -8,6 +8,11 @@ output "vpc_id" {
   value       = aws_vpc.dev.id
 }
 
+output "sq_web" {
+  description = "Security group web"
+  value       = aws_security_group.sg_web
+}
+
 output "public_subnet" {
   description = "Public Subnet IDs"
   value       = aws_subnet.public.*.id
