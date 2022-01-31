@@ -10,7 +10,7 @@ output "vpc_id" {
 
 output "sq_web" {
   description = "Security group web"
-  value       = aws_security_group.sg_web
+  value       = [aws_security_group.sg_web.id]
 }
 
 output "public_subnet" {
