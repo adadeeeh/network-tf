@@ -8,7 +8,7 @@ output "vpc_id" {
   value       = aws_vpc.dev.id
 }
 
-output "sq_web" {
+output "sg_web" {
   description = "Security group web"
   value       = [aws_security_group.sg_web.id]
 }
